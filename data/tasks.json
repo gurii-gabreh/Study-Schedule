@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-13",
+  "description": "学習スケジュールのタスクツリー(WBS)。Lv1(目標)を root とし、children を辿って Lv2〜Lv4 まで自由な深さで枝分かれする。葉ノード(children を持たないノード)だけが start/plannedEnd/actualEnd/status/priority を持つ実行タスク(Lv4)。それ以外のノードは子タスクから開始日・終了日・ステータス・遅延・完了数を自動集計する表示専用のノードなので、このJSON側では日付やstatusを持たせない。日付は YYYY-MM-DD 形式。",
+  "root": {
+    "title": "学習目標を追加してください",
+    "subtitle": "",
+    "summary": "チャットで「〇〇という目標を追加して」のように依頼すると、レベル1(目標)からレベル4(実行タスク)まで順にタスクツリーを作成します。",
+    "children": []
+  }
+}

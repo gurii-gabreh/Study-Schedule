@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学習スケジュールWBS</title>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface-2: #f0ede3;
+    --surface-3: #e8e3d4;
+    --border: #e3ddce;
+    --border-strong: #d0c8b3;
+    --ink: #211d15;
+    --ink-soft: #675f4f;
+    --ink-muted: #99907c;
+
+    --accent: #1f6e63;
+    --accent-soft: #e1efec;
+    --accent-strong: #143f39;
+
+    --status-notstarted: #857c69;
+    --status-notstarted-bg: #eeeae0;
+    --status-inprogress: #1f6e63;
+    --status-inprogress-bg: #e1efec;
+    --status-done: #0ca30c;
+    --status-done-bg: #e1f5df;
+
+    --sev-good: #0ca30c;
+    --sev-good-bg: #e1f5df;
+    --sev-warn: #b8790a;
+    --sev-warn-bg: #fbedd2;
+    --sev-serious: #c85a2e;
+    --sev-serious-bg: #fbe3d5;
+    --sev-critical: #c22f2f;
+    --sev-critical-bg: #f9dcdb;
+
+    --today-tint: rgba(31, 110, 99, 0.09);
+    --today-line: #1f6e63;
+    --weekend-tint: #efeade;
+
+    --shadow: 0 1px 2px rgba(30, 25, 15, 0.05), 0 10px 24px -14px rgba(30, 25, 15, 0.18);
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15140f;
+      --surface: #1d1c15;
+      --surface-2: #262419;
+      --surface-3: #2f2c1c;
+      --border: #35331f;
+      --border-strong: #47441f;
+      --ink: #f3f1e6;
+      --ink-soft: #c7c1ad;
+      --ink-muted: #938a72;
+
+      --accent: #3fae9e;
+      --accent-soft: #1c352f;
+      --accent-strong: #7fd3c5;
+
+      --status-notstarted: #a89e85;
+      --status-notstarted-bg: #2b2919;
+      --status-inprogress: #3fae9e;
+      --status-inprogress-bg: #1c352f;
+      --status-done: #4ecb4e;
+      --status-done-bg: #1a3319;
+
+      --sev-good: #4ecb4e;
+      --sev-good-bg: #1a3319;
+      --sev-warn: #eab038;
+      --sev-warn-bg: #3a2c0f;
+      --sev-serious: #ef8a5c;
+      --sev-serious-bg: #3a2313;
+      --sev-critical: #ef6a6a;
+      --sev-critical-bg: #3a1414;
+
+      --today-tint: rgba(63, 174, 158, 0.14);
+      --today-line: #3fae9e;
+      --weekend-tint: #221f14;
+
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -14px rgba(0, 0, 0, 0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15140f;
+    --surface: #1d1c15;
+    --surface-2: #262419;
+    --surface-3: #2f2c1c;
+    --border: #35331f;
+    --border-strong: #47441f;
+    --ink: #f3f1e6;
+    --ink-soft: #c7c1ad;
+    --ink-muted: #938a72;
+
+    --accent: #3fae9e;
+    --accent-soft: #1c352f;
+    --accent-strong: #7fd3c5;
+
+    --status-notstarted: #a89e85;
+    --status-notstarted-bg: #2b2919;
+    --status-inprogress: #3fae9e;
+    --status-inprogress-bg: #1c352f;
+    --status-done: #4ecb4e;
+    --status-done-bg: #1a3319;
+
+    --sev-good: #4ecb4e;
+    --sev-good-bg: #1a3319;
+    --sev-warn: #eab038;
+    --sev-warn-bg: #3a2c0f;
+    --sev-serious: #ef8a5c;
+    --sev-serious-bg: #3a2313;
+    --sev-critical: #ef6a6a;
+    --sev-critical-bg: #3a1414;
+
+    --today-tint: rgba(63, 174, 158, 0.14);
+    --today-line: #3fae9e;
+    --weekend-tint: #221f14;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -14px rgba(0, 0, 0, 0.6);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    padding: 28px 24px 60px;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+  .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 6px;
+  }
+  h1 { font-size: 26px; font-weight: 800; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+  .lede {
+    font-size: 13.5px; line-height: 1.7; color: var(--ink-soft); max-width: 76ch; margin: 0;
+  }
+
+  /* stat tiles */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stat-tile {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 14px 16px; display: flex; flex-direction: column; gap: 3px;
+  }
+  .stat-tile .num { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; }
+  .stat-tile .num.warn { color: var(--sev-serious); }
+  .stat-tile .label { font-size: 11.5px; color: var(--ink-muted); }
+
+  /* legend */
+  .legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 14px; font-size: 12px; color: var(--ink-soft); box-shadow: var(--shadow);
+  }
+  .legend-group { display: flex; align-items: center; gap: 8px; }
+  .legend-swatch { width: 13px; height: 13px; border-radius: 4px; flex: none; }
+  .legend-swatch.thin { height: 6px; align-self: center; }
+  .legend-tick { width: 0; height: 13px; border-left: 2px dashed var(--ink-muted); flex: none; }
+  .legend-sep { width: 1px; align-self: stretch; background: var(--border); }
+
+  /* table shell */
+  .board {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: var(--shadow); overflow: auto; max-width: 100%;
+  }
+  .empty-state {
+    background: var(--surface); border: 1px dashed var(--border-strong); border-radius: 14px;
+    padding: 32px 20px; text-align: center; color: var(--ink-muted); font-size: 13px; line-height: 1.7;
+  }
+  table { border-collapse: separate; border-spacing: 0; font-size: 12.5px; width: max-content; min-width: 100%; }
+  thead th {
+    position: sticky; top: 0; background: var(--surface); z-index: 3;
+    border-bottom: 1px solid var(--border-strong); padding: 8px 10px;
+    font-weight: 700; color: var(--ink-soft); text-align: left; white-space: nowrap;
+  }
+  tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.lv1 td { background: var(--surface-2); }
+  tbody tr.lv1 td.day { background: none; }
+  tbody tr.lv1 td.day.weekend { background: var(--weekend-tint); }
+
+  th.col-title, td.col-title {
+    position: sticky; left: 0; z-index: 2; background: var(--surface);
+    border-right: 1px solid var(--border-strong); min-width: 260px; max-width: 260px;
+  }
+  tbody tr.lv1 td.col-title { background: var(--surface-2); }
+  thead th.col-title { z-index: 4; }
+
+  .tree-row { display: flex; align-items: flex-start; gap: 6px; }
+  .indent { flex: none; }
+  .twisty {
+    flex: none; width: 16px; height: 16px; border: none; background: none; cursor: pointer;
+    color: var(--ink-muted); display: flex; align-items: center; justify-content: center;
+    padding: 0; margin-top: 1px; border-radius: 4px;
+  }
+  .twisty:hover { background: var(--surface-3); color: var(--ink); }
+  .twisty svg { width: 9px; height: 9px; transition: transform .12s ease; transform: rotate(90deg); }
+  .twisty.collapsed svg { transform: rotate(0deg); }
+  .twisty.leaf { visibility: hidden; }
+  .title-col-body { min-width: 0; }
+  .lv-chip {
+    display: inline-block; font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+    color: var(--ink-muted); background: var(--surface-3); border-radius: 4px; padding: 1px 4px;
+    margin-right: 6px; letter-spacing: 0.02em; vertical-align: 1px;
+  }
+  .lv1 .lv-chip { color: var(--accent-strong); background: var(--accent-soft); }
+  .t-title { display: inline; font-weight: 600; font-size: 12.5px; line-height: 1.35; }
+  .lv1 .t-title { font-weight: 800; font-size: 15px; }
+  .lv2 .t-title { font-weight: 700; font-size: 13.5px; }
+  .t-subtitle { font-size: 11px; color: var(--ink-muted); margin-top: 2px; }
+  .lv1 .t-subtitle { font-size: 11.5px; }
+
+  td.col-summary { min-width: 170px; max-width: 170px; color: var(--ink-soft); }
+  .summary-clip {
+    display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  td.col-date, th.col-date { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink-soft); }
+  td.col-date.dim { color: var(--ink-muted); }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
+    padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+  .chip.status-notstarted { color: var(--status-notstarted); background: var(--status-notstarted-bg); }
+  .chip.status-inprogress { color: var(--status-inprogress); background: var(--status-inprogress-bg); }
+  .chip.status-done { color: var(--status-done); background: var(--status-done-bg); }
+
+  .chip.sev-good { color: var(--sev-good); background: var(--sev-good-bg); }
+  .chip.sev-warn { color: var(--sev-warn); background: var(--sev-warn-bg); }
+  .chip.sev-serious { color: var(--sev-serious); background: var(--sev-serious-bg); }
+  .chip.sev-critical { color: var(--sev-critical); background: var(--sev-critical-bg); }
+  .chip.sev-na { color: var(--ink-muted); background: var(--surface-2); }
+
+  .priority { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; }
+  .priority .dots { display: inline-flex; gap: 2px; }
+  .priority .dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--border-strong); }
+  .priority .dots span.on { background: var(--ink-soft); }
+  .progress-frac {
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); white-space: nowrap;
+  }
+  .progress-frac.complete { color: var(--status-done); font-weight: 700; }
+
+  /* calendar cells */
+  td.day, th.day { width: 27px; min-width: 27px; max-width: 27px; text-align: center; padding: 0; }
+  th.day { padding: 6px 0 4px; }
+  .day-head { display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
+  .day-head .wd { font-size: 9.5px; color: var(--ink-muted); font-weight: 600; }
+  .day-head .dn { font-size: 11.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  th.day.weekend .day-head .wd, th.day.weekend .day-head .dn { color: var(--ink-muted); }
+  th.day.today .day-head .dn { color: var(--today-line); }
+
+  td.day { height: 40px; position: relative; }
+  td.day.weekend { background: var(--weekend-tint); }
+  td.day.today { box-shadow: inset 0 0 0 9999px var(--today-tint); }
+  td.day .fill { position: absolute; inset: 6px 0; border-radius: 3px; }
+  td.day.cell-plan-notstarted .fill { background: var(--status-notstarted-bg); border: 1px dashed var(--border-strong); }
+  td.day.cell-plan-inprogress .fill { background: var(--status-inprogress-bg); }
+  td.day.cell-plan-done .fill { background: var(--status-done-bg); }
+  td.day.cell-slip .fill.slip { position: absolute; inset: 6px 0; border-radius: 3px; }
+  td.day.slip-warn .fill.slip { background: var(--sev-warn-bg); }
+  td.day.slip-serious .fill.slip { background: var(--sev-serious-bg); }
+  td.day.slip-critical .fill.slip { background: var(--sev-critical-bg); }
+  td.day.origin-end { border-right: 2px dashed var(--ink-muted); }
+  td.day.start-cap .fill { border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin-left: 2px; }
+  td.day.end-cap .fill { border-top-right-radius: 3px; border-bottom-right-radius: 3px; margin-right: 2px; }
+  td.day.actual-end-mark::after {
+    content: ""; position: absolute; right: 3px; top: 50%; width: 6px; height: 6px;
+    transform: translateY(-50%); border-radius: 50%; background: var(--status-done);
+    box-shadow: 0 0 0 2px var(--surface);
+  }
+  /* 集計行(Lv1〜3)のバー: 実行タスク(Lv4)の太い実績バーと区別するため、細い帯として表示する */
+  td.day.rollup .fill { inset: 15px 0; }
+  td.day.rollup .fill.slip { inset: 15px 0; }
+
+  footer.note {
+    font-size: 11.5px; color: var(--ink-muted); display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+
+  /* tooltip */
+  #tip {
+    position: fixed; pointer-events: none; z-index: 50; background: var(--ink); color: var(--bg);
+    font-size: 11.5px; line-height: 1.5; padding: 7px 10px; border-radius: 8px; max-width: 240px;
+    box-shadow: var(--shadow); opacity: 0; transform: translateY(2px); transition: opacity .1s ease;
+  }
+  #tip.show { opacity: 1; }
+  #tip b { display: block; margin-bottom: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #tip, .twisty svg { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div>
+    <p class="eyebrow">Study Schedule</p>
+    <h1>学習スケジュールWBS</h1>
+  </div>
+  <p class="lede">
+    タスクをレベル1〜4の階層(WBS)で管理します。Lv1は達成したい目標、Lv2〜3はそれを分解した中間タスク、
+    Lv4が実際にカレンダーへ予定を入れて進める実行タスクです。Lv4のステータス・完了が自動的に親(Lv3→Lv2→Lv1)へ
+    積み上がり、上位タスクの期間・遅延も子タスクから自動集計されます。各行の▸/⌄で折りたたみできます。
+    タスクの追加・ステータス更新はチャットでClaudeへ依頼してください。
+  </p>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="legend" id="legend" hidden>
+    <div class="legend-group"><span class="legend-swatch" style="background:var(--status-notstarted-bg);border:1px dashed var(--border-strong)"></span>未対応</div>
+    <div class="legend-group"><span class="legend-swatch" style="background:var(--status-inprogress-bg)"></span>対応中</div>
+    <div class="legend-group"><span class="legend-swatch" style="background:var(--status-done-bg)"></span>完了</div>
+    <div class="legend-sep"></div>
+    <div class="legend-group"><span class="legend-swatch" style="background:var(--status-inprogress-bg)"></span>Lv4=実行タスクの実績(太いバー)</div>
+    <div class="legend-group"><span class="legend-swatch thin" style="background:var(--status-inprogress-bg)"></span>Lv1〜3=子タスクからの自動集計(細いバー)</div>
+    <div class="legend-sep"></div>
+    <div class="legend-group"><span class="legend-tick"></span>当初の終了予定日</div>
+    <div class="legend-group"><span class="legend-swatch" style="background:var(--sev-warn-bg)"></span>遅延(軽度〜重度で色が濃くなる)</div>
+  </div>
+
+  <div class="board" id="board" hidden></div>
+  <div class="empty-state" id="emptyState" hidden></div>
+
+  <footer class="note">
+    <span id="rangeNote"></span>
+    <span>本日: <span id="todayLabel"></span></span>
+  </footer>
+</div>
+
+<div id="tip"></div>
+
+<script>
+const WD = ["日", "月", "火", "水", "木", "金", "土"];
+const now = new Date();
+const TODAY = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+function parseDate(s) {
+  if (!s) return null;
+  const [y, m, day] = s.split("-").map(Number);
+  return new Date(y, m - 1, day);
+}
+function addDays(date, n) { const r = new Date(date); r.setDate(r.getDate() + n); return r; }
+function diffDays(a, b) { return Math.round((a - b) / 86400000); }
+function fmt(date) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`; }
+function fmtShort(date) { return `${date.getMonth()+1}/${date.getDate()}`; }
+function isWeekend(date) { const w = date.getDay(); return w === 0 || w === 6; }
+function sameDay(a, b) { return fmt(a) === fmt(b); }
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function severityTier(delayDays) {
+  if (delayDays === null) return { key: "na", label: "-" };
+  if (delayDays <= 0) return { key: "good", label: delayDays < 0 ? `${-delayDays}日早い` : "順調" };
+  if (delayDays <= 2) return { key: "warn", label: `+${delayDays}日` };
+  if (delayDays <= 5) return { key: "serious", label: `+${delayDays}日` };
+  return { key: "critical", label: `+${delayDays}日` };
+}
+
+// data/tasks.jsonの日付(文字列)をDateオブジェクトへ変換する。葉ノード(children無し)だけが対象。
+function reviveDates(raw) {
+  const node = { ...raw };
+  if (raw.children) {
+    node.children = raw.children.map(reviveDates);
+  } else {
+    node.start = parseDate(raw.start);
+    node.plannedEnd = parseDate(raw.plannedEnd);
+    node.actualEnd = raw.actualEnd ? parseDate(raw.actualEnd) : null;
+  }
+  return node;
+}
+
+// ---- 子タスクからの再帰的な自動集計(Lv4の実データがLv3→Lv2→Lv1へ積み上がる) ----
+function computeNode(raw, level, path) {
+  const id = path;
+  const isLeaf = !raw.children;
+
+  if (isLeaf) {
+    let currentEnd, delayDays;
+    if (raw.status === "完了") {
+      currentEnd = raw.actualEnd;
+      delayDays = diffDays(raw.actualEnd, raw.plannedEnd);
+    } else if (raw.status === "未対応") {
+      currentEnd = raw.plannedEnd;
+      delayDays = TODAY > raw.start ? diffDays(TODAY, raw.plannedEnd) : null;
+    } else {
+      currentEnd = TODAY > raw.plannedEnd ? TODAY : raw.plannedEnd;
+      delayDays = diffDays(currentEnd, raw.plannedEnd);
+    }
+    return {
+      ...raw, id, level, isLeaf: true, children: [],
+      start: raw.start, plannedEnd: raw.plannedEnd, currentEnd, actualEnd: raw.actualEnd,
+      status: raw.status, delayDays, sev: severityTier(delayDays),
+      doneLeaves: raw.status === "完了" ? 1 : 0, totalLeaves: 1,
+    };
+  }
+
+  const kids = raw.children.map((c, i) => computeNode(c, level + 1, `${path}-${i}`));
+  const start = kids.reduce((min, k) => k.start < min ? k.start : min, kids[0].start);
+  const plannedEnd = kids.reduce((max, k) => k.plannedEnd > max ? k.plannedEnd : max, kids[0].plannedEnd);
+  const currentEnd = kids.reduce((max, k) => k.currentEnd > max ? k.currentEnd : max, kids[0].currentEnd);
+  const totalLeaves = kids.reduce((s, k) => s + k.totalLeaves, 0);
+  const doneLeaves = kids.reduce((s, k) => s + k.doneLeaves, 0);
+  const anyInProgress = kids.some(k => k.status === "対応中" || (k.doneLeaves > 0 && k.doneLeaves < k.totalLeaves));
+  const status = doneLeaves === totalLeaves ? "完了" : (doneLeaves > 0 || anyInProgress) ? "対応中" : "未対応";
+  const actualEnd = status === "完了" ? kids.reduce((max, k) => (k.actualEnd && k.actualEnd > max) ? k.actualEnd : max, kids[0].actualEnd) : null;
+  // 遅延は集計した開始日・終了日から計算し直すのではなく、子タスクの中で最も遅れている
+  // delayDaysをそのまま引き継ぐ(集計後の日付だけで再計算すると、別ブランチの遅延が
+  // 未着手タスクの遠い予定終了日に埋もれて「順調」に見えてしまう問題があったため)。
+  const childDelays = kids.map(k => k.delayDays).filter(v => v !== null);
+  const delayDays = childDelays.length ? Math.max(...childDelays) : null;
+
+  return {
+    ...raw, id, level, isLeaf: false, children: kids,
+    start, plannedEnd, currentEnd, actualEnd, status, delayDays, sev: severityTier(delayDays),
+    doneLeaves, totalLeaves,
+  };
+}
+
+function flatten(node, out) {
+  out.push(node);
+  node.children.forEach(c => flatten(c, out));
+  return out;
+}
+
+const statusChipClass = { "未対応": "status-notstarted", "対応中": "status-inprogress", "完了": "status-done" };
+function priorityDots(level) {
+  return `<span class="dots">${[1,2,3].map(i => `<span class="${i <= level ? "on" : ""}"></span>`).join("")}</span>`;
+}
+function twistyIcon() {
+  return `<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 1.5L7 5l-4.5 3.5"/></svg>`;
+}
+
+const collapsed = new Set();
+let ROOT = null;
+let LEAVES = [];
+let DAYS = [];
+
+function renderCalendarCells(t) {
+  let cells = "";
+  for (const day of DAYS) {
+    const we = isWeekend(day);
+    const isToday = sameDay(day, TODAY);
+    const inPlanned = day >= t.start && day <= t.plannedEnd;
+    const inSlip = day > t.plannedEnd && day <= t.currentEnd && t.status !== "未対応";
+    const isStartCap = sameDay(day, t.start);
+    const isEndCap = sameDay(day, t.currentEnd);
+    const isOriginEnd = sameDay(day, t.plannedEnd) && t.currentEnd > t.plannedEnd;
+    const isActualEndMark = t.isLeaf && t.status === "完了" && sameDay(day, t.actualEnd);
+
+    let cls = ["day"];
+    if (we) cls.push("weekend");
+    if (isToday) cls.push("today");
+    if (!t.isLeaf) cls.push("rollup");
+    if (isStartCap && (inPlanned || inSlip)) cls.push("start-cap");
+    if (isEndCap) cls.push("end-cap");
+    if (isOriginEnd) cls.push("origin-end");
+    if (isActualEndMark) cls.push("actual-end-mark");
+
+    let fillHtml = "";
+    if (inPlanned) {
+      const planCls = t.status === "未対応" ? "cell-plan-notstarted" : t.status === "完了" ? "cell-plan-done" : "cell-plan-inprogress";
+      cls.push(planCls);
+      fillHtml = `<span class="fill"></span>`;
+    } else if (inSlip) {
+      cls.push("cell-slip", `slip-${t.sev.key === "na" || t.sev.key === "good" ? "warn" : t.sev.key}`);
+      fillHtml = `<span class="fill slip"></span>`;
+    }
+
+    const tipTitle = (inPlanned || inSlip)
+      ? `${t.title}\n${fmt(day)}（${inSlip ? "当初予定超過" : t.status}）${!t.isLeaf ? " ・子タスクからの自動集計" : ""}`
+      : "";
+    cells += `<td class="${cls.join(" ")}"${tipTitle ? ` data-tip="${escapeHtml(tipTitle)}"` : ""}>${fillHtml}</td>`;
+  }
+  return cells;
+}
+
+function renderNode(t) {
+  const hasChildren = t.children.length > 0;
+  const isCollapsed = collapsed.has(t.id);
+  const delayChip = t.sev.key === "na"
+    ? `<span class="chip sev-na">-</span>`
+    : `<span class="chip sev-${t.sev.key}">${t.sev.label}</span>`;
+  const priorityOrProgress = t.isLeaf
+    ? `<span class="priority">${priorityDots(t.priority)}${["低","中","高"][t.priority - 1]}</span>`
+    : `<span class="progress-frac${t.doneLeaves === t.totalLeaves ? " complete" : ""}">${t.doneLeaves}/${t.totalLeaves} 完了</span>`;
+
+  let html = `<tr class="lv${t.level}" data-node="${t.id}">
+    <td class="col-title">
+      <div class="tree-row">
+        <span class="indent" style="width:${(t.level - 1) * 18}px"></span>
+        <button type="button" class="twisty${hasChildren ? "" : " leaf"}${isCollapsed ? " collapsed" : ""}" data-toggle="${t.id}" ${hasChildren ? "" : "tabindex=\"-1\" aria-hidden=\"true\""}>${twistyIcon()}</button>
+        <div class="title-col-body">
+          <span class="lv-chip">Lv${t.level}</span><span class="t-title">${escapeHtml(t.title)}</span>
+          <div class="t-subtitle">${escapeHtml(t.subtitle || "")}</div>
+        </div>
+      </div>
+    </td>
+    <td class="col-summary"><span class="summary-clip" title="${escapeHtml(t.summary || "")}">${escapeHtml(t.summary || "")}</span></td>
+    <td class="col-date">${fmtShort(t.start)}</td>
+    <td class="col-date${t.currentEnd > t.plannedEnd ? "" : " dim"}">${fmtShort(t.currentEnd)}${t.currentEnd > t.plannedEnd ? ` <span style="color:var(--ink-muted)">(当初${fmtShort(t.plannedEnd)})</span>` : ""}</td>
+    <td class="col-date${t.status === "完了" ? "" : " dim"}">${t.actualEnd ? fmtShort(t.actualEnd) : "-"}</td>
+    <td><span class="chip ${statusChipClass[t.status]}"><span class="dot"></span>${t.status}</span></td>
+    <td>${priorityOrProgress}</td>
+    <td>${delayChip}</td>
+    ${renderCalendarCells(t)}
+  </tr>`;
+
+  if (hasChildren && !isCollapsed) {
+    t.children.forEach(c => { html += renderNode(c); });
+  }
+  return html;
+}
+
+function renderTheadDays() {
+  return DAYS.map(day => {
+    const we = isWeekend(day);
+    const isToday = sameDay(day, TODAY);
+    return `<th class="day${we ? " weekend" : ""}${isToday ? " today" : ""}">
+      <div class="day-head"><span class="wd">${WD[day.getDay()]}</span><span class="dn">${day.getDate()}</span></div>
+    </th>`;
+  }).join("");
+}
+
+function render() {
+  document.getElementById("board").innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th class="col-title">タスク(WBS)</th>
+          <th>概要</th>
+          <th class="col-date">開始予定</th>
+          <th class="col-date">終了予定</th>
+          <th class="col-date">終了日</th>
+          <th>ステータス</th>
+          <th>優先度/進捗</th>
+          <th>遅延</th>
+          ${renderTheadDays()}
+        </tr>
+      </thead>
+      <tbody>${renderNode(ROOT)}</tbody>
+    </table>
+  `;
+  document.querySelectorAll("[data-toggle]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.toggle;
+      if (collapsed.has(id)) collapsed.delete(id); else collapsed.add(id);
+      render();
+    });
+  });
+}
+
+async function loadTasks() {
+  const boardEl = document.getElementById("board");
+  const emptyEl = document.getElementById("emptyState");
+  const legendEl = document.getElementById("legend");
+  let data;
+  try {
+    const res = await fetch("./data/tasks.json", { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    data = await res.json();
+  } catch (e) {
+    console.error("data/tasks.json の取得に失敗しました", e);
+    emptyEl.hidden = false;
+    emptyEl.textContent = "data/tasks.json を読み込めませんでした。GitHub Pages等のサーバー経由で開いてください。";
+    return;
+  }
+
+  const revived = reviveDates(data.root);
+  if (!revived.children || revived.children.length === 0) {
+    document.getElementById("stats").innerHTML = "";
+    emptyEl.hidden = false;
+    emptyEl.innerHTML = `<strong>${escapeHtml(revived.title)}</strong><br>${escapeHtml(revived.summary || "")}`;
+    document.getElementById("rangeNote").textContent = "";
+    document.getElementById("todayLabel").textContent = fmt(TODAY);
+    return;
+  }
+
+  ROOT = computeNode(revived, 1, "0");
+  LEAVES = flatten(ROOT, []).filter(n => n.isLeaf);
+
+  let rangeStart = addDays(ROOT.start, -2);
+  let rangeEnd = addDays(ROOT.currentEnd, 2);
+  DAYS = [];
+  for (let cur = new Date(rangeStart); cur <= rangeEnd; cur = addDays(cur, 1)) DAYS.push(new Date(cur));
+
+  const delayed = LEAVES.filter(t => t.status !== "完了" && t.delayDays > 0).length;
+  const done = LEAVES.filter(t => t.status === "完了").length;
+  document.getElementById("stats").innerHTML = [
+    { num: 1, label: "目標(Lv1)" },
+    { num: LEAVES.length, label: "実行タスク(Lv4)" },
+    { num: delayed, label: "遅延中", warn: delayed > 0 },
+    { num: `${done}/${LEAVES.length}`, label: "完了(Lv4)" },
+  ].map(s => `<div class="stat-tile"><div class="num${s.warn ? " warn" : ""}">${s.num}</div><div class="label">${s.label}</div></div>`).join("");
+
+  legendEl.hidden = false;
+  boardEl.hidden = false;
+  emptyEl.hidden = true;
+  render();
+
+  document.getElementById("rangeNote").textContent =
+    `カレンダー表示範囲: ${fmt(DAYS[0])} 〜 ${fmt(DAYS[DAYS.length-1])}（全タスクの開始・終了日から自動算出）`;
+  document.getElementById("todayLabel").textContent = fmt(TODAY);
+}
+loadTasks();
+
+// ---- tooltip ----
+const tip = document.getElementById("tip");
+document.getElementById("board").addEventListener("mousemove", (e) => {
+  const cell = e.target.closest("[data-tip]");
+  if (!cell) { tip.classList.remove("show"); return; }
+  const lines = cell.dataset.tip.split("\n");
+  tip.innerHTML = `<b>${lines[0]}</b>${lines.slice(1).join("<br>")}`;
+  tip.style.left = (e.clientX + 14) + "px";
+  tip.style.top = (e.clientY + 14) + "px";
+  tip.classList.add("show");
+});
+document.getElementById("board").addEventListener("mouseleave", () => tip.classList.remove("show"));
+</script>
+</body>
+</html>
