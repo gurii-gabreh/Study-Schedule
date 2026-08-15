@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>学習スケジュールWBS</title>
+<title>スケジュール管理WBS</title>
 <style>
   :root {
     --bg: #f7f5f0;
@@ -284,6 +284,21 @@
     flex-wrap: wrap; gap: 8px;
   }
 
+  .actuals { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .actuals-title { font-size: 13.5px; font-weight: 800; margin: 0 0 6px; }
+  .actuals-caveat {
+    font-size: 11px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 10px;
+    background: var(--surface-2); border-radius: 8px; padding: 8px 10px;
+  }
+  .actuals-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .actuals-table th, .actuals-table td {
+    text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .actuals-table th { color: var(--ink-soft); font-weight: 700; font-size: 11px; }
+  .actuals-table td.a-duration { font-family: var(--mono); white-space: nowrap; font-weight: 700; }
+  .actuals-table tfoot td { font-weight: 800; border-bottom: none; }
+
   /* tooltip */
   #tip {
     position: fixed; pointer-events: none; z-index: 50; background: var(--ink); color: var(--bg);
@@ -302,14 +317,14 @@
 
 <div class="wrap">
   <div>
-    <p class="eyebrow">Study Schedule</p>
-    <h1>学習スケジュールWBS</h1>
+    <p class="eyebrow">Schedule Management</p>
+    <h1>スケジュール管理WBS</h1>
   </div>
   <p class="lede">
-    タスクをレベル1〜4の階層(WBS)で管理します。Lv1は達成したい目標、Lv2〜3はそれを分解した中間タスク、
-    Lv4が実際にカレンダーへ予定を入れて進める実行タスクです。Lv4のステータス・完了が自動的に親(Lv3→Lv2→Lv1)へ
-    積み上がり、上位タスクの期間・遅延も子タスクから自動集計されます。各行の▸/⌄で折りたたみできます。
-    タスクの追加・ステータス更新はチャットでClaudeへ依頼してください。
+    学習タスクと各アプリの開発タスクを、同じ階層(WBS)・同じ時間予算で管理します。Lv1は全体、Lv2〜3はそれを
+    分解した中間タスク、Lv4が実際にカレンダーへ予定を入れて進める実行タスクです。Lv4のステータス・完了が
+    自動的に親(Lv3→Lv2→Lv1)へ積み上がり、上位タスクの期間・遅延も子タスクから自動集計されます。各行の▸/⌄で
+    折りたたみできます。タスクの追加・ステータス更新はチャットでClaudeへ依頼してください。
   </p>
 
   <div class="stats" id="stats"></div>
@@ -328,6 +343,12 @@
 
   <div class="board" id="board" hidden></div>
   <div class="empty-state" id="emptyState" hidden></div>
+
+  <section class="actuals" id="actualsSection" hidden>
+    <h2 class="actuals-title">実績時間ログ(見積もり精度向上のための参考記録)</h2>
+    <p class="actuals-caveat" id="actualsCaveat"></p>
+    <table class="actuals-table" id="actualsTable"></table>
+  </section>
 
   <footer class="note">
     <span id="rangeNote"></span>
@@ -609,6 +630,41 @@ async function loadTasks() {
   document.getElementById("rangeNote").textContent =
     `カレンダー表示範囲: ${fmt(DAYS[0])} 〜 ${fmt(DAYS[DAYS.length-1])}（全タスクの開始・終了日から自動算出）`;
   document.getElementById("todayLabel").textContent = fmt(TODAY);
+
+  renderActualsLog(data.actualsLog);
+}
+
+function fmtDuration(min) {
+  const h = Math.floor(min / 60), m = min % 60;
+  if (h === 0) return `${m}分`;
+  if (m === 0) return `${h}時間`;
+  return `${h}時間${m}分`;
+}
+
+function renderActualsLog(log) {
+  const section = document.getElementById("actualsSection");
+  if (!log || !Array.isArray(log.entries) || log.entries.length === 0) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  document.getElementById("actualsCaveat").textContent = log.caveat || "";
+
+  const rows = log.entries.map(e => `
+    <tr>
+      <td>${escapeHtml(e.date)}</td>
+      <td>${escapeHtml(e.timeRange || "")}</td>
+      <td class="a-duration">${fmtDuration(e.durationMinutes)}</td>
+      <td>${escapeHtml(e.summary || "")}</td>
+    </tr>`).join("");
+
+  const total = log.entries.reduce((sum, e) => sum + (e.durationMinutes || 0), 0);
+
+  document.getElementById("actualsTable").innerHTML = `
+    <thead><tr><th>日付</th><th>時間帯</th><th>所要時間</th><th>内容</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td colspan="2">合計</td><td class="a-duration">${fmtDuration(total)}</td><td></td></tr></tfoot>
+  `;
 }
 loadTasks();
 

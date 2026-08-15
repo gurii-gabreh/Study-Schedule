@@ -1,47 +1,256 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-13",
-  "description": "学習スケジュールのタスクツリー(WBS)。Lv1(目標)を root とし、children を辿って自由な深さで枝分かれする。葉ノード(children を持たないノード)だけが start/plannedEnd/actualEnd/status/priority を持つ実行タスク。それ以外のノードは子タスクから開始日・終了日・ステータス・遅延・完了数を自動集計する表示専用のノード。日付は YYYY-MM-DD 形式。",
+  "updatedAt": "2026-08-15",
+  "description": "スケジュール管理のタスクツリー(WBS)。学習と各アプリの開発タスクを同じ時間予算で管理する。Lv1(全体)を root とし、children を辿って自由な深さで枝分かれする。葉ノード(children を持たないノード)だけが start/plannedEnd/actualEnd/status/priority を持つ実行タスク。それ以外のノードは子タスクから開始日・終了日・ステータス・遅延・完了数を自動集計する表示専用のノード。日付は YYYY-MM-DD 形式。",
   "studyPolicy": {
     "summary": "疲労時でも続けやすい学習法(書籍「疲れ切った人の勉強法」の研究紹介)に基づき、各分野を①インプット→②積極的想起チェック(検索練習)→③間隔反復レビュー(1〜2日空けて再想起)の3ステップに分解している。疲れている日は①を「理解しようとせず眺めるだけ」に切り替えてもよい。",
     "source": "https://docs.google.com/spreadsheets/d/1V4bbJTbWvg2e37x7iIFEPbpv4Vc5slelF2-EI6CgouA/edit?gid=0#gid=0"
   },
   "root": {
-    "title": "6分野の概要を一通りさらう(全体像の把握)",
-    "subtitle": "AIエンジニア方向性・AIE-021",
-    "summary": "アーキテクチャ/サーバー・インフラ/セキュリティ/AI・LLM/データベース/テストの6分野を、「言葉を見て反応できる」レベルまで一通り把握する。各分野は①インプット→②積極的想起チェック→③間隔反復レビューの3ステップで進める。",
+    "title": "スケジュール管理",
+    "subtitle": "学習 + 各アプリの残タスク",
+    "summary": "学習(6分野の概要把握)と、progress-tracker-dashboardで管理している各アプリの残タスクを1つの時間予算(平日30分・休日1時間)で順番に消化するスケジュール。優先度は学習(既存分)→ai-research-radar(小)→usage-tracker→text-extraction(認証情報待ちのため確定日ではない)の順。",
     "children": [
       {
-        "title": "アーキテクチャ",
-        "subtitle": "",
-        "summary": "",
+        "title": "6分野の概要を一通りさらう(全体像の把握)",
+        "subtitle": "AIエンジニア方向性・AIE-021",
+        "summary": "アーキテクチャ/サーバー・インフラ/セキュリティ/AI・LLM/データベース/テストの6分野を、「言葉を見て反応できる」レベルまで一通り把握する。各分野は①インプット→②積極的想起チェック→③間隔反復レビューの3ステップで進める。",
         "children": [
           {
-            "title": "インプット",
-            "subtitle": "見出し・要点をざっと眺める",
-            "summary": "・デザインパターンの3系統: 生成(Factory, Singleton, Builder)/構造(Adapter, Facade, Decorator)/振る舞い(Observer, Strategy, Command)\n・SOLID原則の5つの名前と一言の意味(単一責任・開放閉鎖・リスコフの置換・インターフェース分離・依存性逆転)\n・Clean Architectureの核心図: 「依存は常に内側(ビジネスロジック)に向かう」\n・モノリス vs マイクロサービスという対比軸\n(疲れている日は「眺めるだけ」でもOK)",
-            "start": "2026-08-13",
-            "plannedEnd": "2026-08-15",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
+            "title": "アーキテクチャ",
+            "subtitle": "",
+            "summary": "",
+            "children": [
+              {
+                "title": "インプット",
+                "subtitle": "見出し・要点をざっと眺める",
+                "summary": "・デザインパターンの3系統: 生成(Factory, Singleton, Builder)/構造(Adapter, Facade, Decorator)/振る舞い(Observer, Strategy, Command)\n・SOLID原則の5つの名前と一言の意味(単一責任・開放閉鎖・リスコフの置換・インターフェース分離・依存性逆転)\n・Clean Architectureの核心図: 「依存は常に内側(ビジネスロジック)に向かう」\n・モノリス vs マイクロサービスという対比軸\n(疲れている日は「眺めるだけ」でもOK)",
+                "start": "2026-08-13",
+                "plannedEnd": "2026-08-15",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "積極的想起チェック",
+                "subtitle": "検索練習(何も見ずに説明できるか)",
+                "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
+                "start": "2026-08-16",
+                "plannedEnd": "2026-08-16",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "間隔反復レビュー",
+                "subtitle": "1〜2日空けてもう一度思い出す",
+                "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
+                "start": "2026-08-18",
+                "plannedEnd": "2026-08-18",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              }
+            ]
           },
           {
-            "title": "積極的想起チェック",
-            "subtitle": "検索練習(何も見ずに説明できるか)",
-            "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
-            "start": "2026-08-16",
-            "plannedEnd": "2026-08-16",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
+            "title": "サーバー・インフラ",
+            "subtitle": "",
+            "summary": "",
+            "children": [
+              {
+                "title": "インプット",
+                "subtitle": "見出し・要点をざっと眺める",
+                "summary": "・HTTP/HTTPSのリクエスト・レスポンスの基本構造\n・サーバーレス(Cloudflare Workers等)vs 従来型サーバーの違い(コールドスタート・実行時間制限・ステートレス)\n・ロードバランサー・キャッシュ・CDNの役割\n・クラウドの基本語彙(リージョン・可用性・スケーリング)\n(疲れている日は「眺めるだけ」でもOK)",
+                "start": "2026-08-19",
+                "plannedEnd": "2026-08-21",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "積極的想起チェック",
+                "subtitle": "検索練習(何も見ずに説明できるか)",
+                "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
+                "start": "2026-08-22",
+                "plannedEnd": "2026-08-22",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "間隔反復レビュー",
+                "subtitle": "1〜2日空けてもう一度思い出す",
+                "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
+                "start": "2026-08-24",
+                "plannedEnd": "2026-08-24",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              }
+            ]
           },
           {
-            "title": "間隔反復レビュー",
-            "subtitle": "1〜2日空けてもう一度思い出す",
-            "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
-            "start": "2026-08-18",
-            "plannedEnd": "2026-08-18",
+            "title": "セキュリティ",
+            "subtitle": "",
+            "summary": "",
+            "children": [
+              {
+                "title": "インプット",
+                "subtitle": "見出し・要点をざっと眺める",
+                "summary": "・OWASP Top 10の項目名(インジェクション・XSS・認証の不備・アクセス制御の不備など)\n・暗号化の2区分: 対称鍵 vs 公開鍵\n・認証(Authentication、本人確認)と認可(Authorization、権限確認)の違い\n・シークレット管理の基本(コードに直書きしない、環境変数化)\n(疲れている日は「眺めるだけ」でもOK)",
+                "start": "2026-08-25",
+                "plannedEnd": "2026-08-27",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "積極的想起チェック",
+                "subtitle": "検索練習(何も見ずに説明できるか)",
+                "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
+                "start": "2026-08-28",
+                "plannedEnd": "2026-08-28",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "間隔反復レビュー",
+                "subtitle": "1〜2日空けてもう一度思い出す",
+                "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
+                "start": "2026-08-30",
+                "plannedEnd": "2026-08-30",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              }
+            ]
+          },
+          {
+            "title": "AI/LLM",
+            "subtitle": "",
+            "summary": "",
+            "children": [
+              {
+                "title": "インプット",
+                "subtitle": "見出し・要点をざっと眺める",
+                "summary": "・プロンプトエンジニアリングの基本(指示の与え方で出力が変わる)\n・RAG(検索拡張生成): 外部情報を検索してから回答させる仕組み\n・Embedding(埋め込み): 文章を数値ベクトルに変換し類似度を計算する仕組み\n・トークン・レート制限・コストの関係(長い入出力ほど高くつく)\n(疲れている日は「眺めるだけ」でもOK)",
+                "start": "2026-08-31",
+                "plannedEnd": "2026-09-02",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "積極的想起チェック",
+                "subtitle": "検索練習(何も見ずに説明できるか)",
+                "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
+                "start": "2026-09-03",
+                "plannedEnd": "2026-09-03",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "間隔反復レビュー",
+                "subtitle": "1〜2日空けてもう一度思い出す",
+                "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
+                "start": "2026-09-05",
+                "plannedEnd": "2026-09-05",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              }
+            ]
+          },
+          {
+            "title": "データベース",
+            "subtitle": "",
+            "summary": "",
+            "children": [
+              {
+                "title": "インプット",
+                "subtitle": "見出し・要点をざっと眺める",
+                "summary": "・SQL(構造化・厳密なスキーマ)vs NoSQL(柔軟なスキーマ)の違い\n・正規化: データの重複を減らす設計手法\n・インデックス: 検索を高速化する仕組み(その分書き込みは遅くなる)\n・トランザクション/ACID: 「全部成功するか、全部失敗するか」を保証する仕組み\n(疲れている日は「眺めるだけ」でもOK)",
+                "start": "2026-09-06",
+                "plannedEnd": "2026-09-07",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "積極的想起チェック",
+                "subtitle": "検索練習(何も見ずに説明できるか)",
+                "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
+                "start": "2026-09-08",
+                "plannedEnd": "2026-09-08",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "間隔反復レビュー",
+                "subtitle": "1〜2日空けてもう一度思い出す",
+                "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
+                "start": "2026-09-10",
+                "plannedEnd": "2026-09-10",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              }
+            ]
+          },
+          {
+            "title": "テスト",
+            "subtitle": "",
+            "summary": "",
+            "children": [
+              {
+                "title": "インプット",
+                "subtitle": "見出し・要点をざっと眺める",
+                "summary": "・単体テスト(1関数)・結合テスト(複数の組み合わせ)・E2Eテスト(実際の操作全体)の違い\n・TDD(テスト駆動開発)のサイクル: Red(失敗するテストを書く)→Green(通す実装)→Refactor(整理)\n・カバレッジ: コードのうちテストで通った割合を示す指標\n(疲れている日は「眺めるだけ」でもOK)",
+                "start": "2026-09-11",
+                "plannedEnd": "2026-09-12",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "積極的想起チェック",
+                "subtitle": "検索練習(何も見ずに説明できるか)",
+                "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
+                "start": "2026-09-13",
+                "plannedEnd": "2026-09-13",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              },
+              {
+                "title": "間隔反復レビュー",
+                "subtitle": "1〜2日空けてもう一度思い出す",
+                "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
+                "start": "2026-09-15",
+                "plannedEnd": "2026-09-15",
+                "actualEnd": null,
+                "status": "未対応",
+                "priority": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "ai-research-radar: Gemini調査体制の整備",
+        "subtitle": "AIR-001",
+        "summary": "コード側の実装(GitHub Pages・レート制限対応・繰り返し調査・Claudeフォールバック)は完了済み。残るのはユーザー側の設定作業のみ。",
+        "children": [
+          {
+            "title": "専用Claude調査ルームの作成・依頼文貼付・gas再デプロイ",
+            "subtitle": "AIR-001",
+            "summary": "専用のClaude調査ルーム(別セッション)を作成して依頼文を貼り付け、gas/Code.gsを再デプロイする。コード実装は既に完了しているためユーザー側の設定作業のみ。",
+            "start": "2026-09-16",
+            "plannedEnd": "2026-09-16",
             "actualEnd": null,
             "status": "未対応",
             "priority": 2
@@ -49,36 +258,46 @@
         ]
       },
       {
-        "title": "サーバー・インフラ",
-        "subtitle": "",
-        "summary": "",
+        "title": "usage-tracker: 使用量分析ダッシュボード",
+        "subtitle": "UST-001",
+        "summary": "Claude Codeの1日あたりの作業量と利用上限の相関を実測データから把握し、予測・アドバイス機能まで備えたダッシュボードを構築する。",
         "children": [
           {
-            "title": "インプット",
-            "subtitle": "見出し・要点をざっと眺める",
-            "summary": "・HTTP/HTTPSのリクエスト・レスポンスの基本構造\n・サーバーレス(Cloudflare Workers等)vs 従来型サーバーの違い(コールドスタート・実行時間制限・ステートレス)\n・ロードバランサー・キャッシュ・CDNの役割\n・クラウドの基本語彙(リージョン・可用性・スケーリング)\n(疲れている日は「眺めるだけ」でもOK)",
-            "start": "2026-08-19",
-            "plannedEnd": "2026-08-21",
+            "title": "使用量ログ・利用上限ログのタブ追加",
+            "subtitle": "UST-003",
+            "summary": "実装進捗管理シートに「使用量ログ」「利用上限ログ」の2タブを追加する。手作業でのシート編集のみ。",
+            "start": "2026-09-17",
+            "plannedEnd": "2026-09-17",
             "actualEnd": null,
             "status": "未対応",
             "priority": 2
           },
           {
-            "title": "積極的想起チェック",
-            "subtitle": "検索練習(何も見ずに説明できるか)",
-            "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
-            "start": "2026-08-22",
-            "plannedEnd": "2026-08-22",
+            "title": "各Routineへ自動記録を依頼",
+            "subtitle": "UST-004",
+            "summary": "タブ追加後、各Routineがタスク着手・完了のたびに使用量ログへ自動記録するようプロンプトを更新する。",
+            "start": "2026-09-17",
+            "plannedEnd": "2026-09-18",
             "actualEnd": null,
             "status": "未対応",
             "priority": 2
           },
           {
-            "title": "間隔反復レビュー",
-            "subtitle": "1〜2日空けてもう一度思い出す",
-            "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
-            "start": "2026-08-24",
-            "plannedEnd": "2026-08-24",
+            "title": "専用リポジトリ・可視化サイト構築",
+            "subtitle": "UST-005",
+            "summary": "使用量ログを可視化する専用サイトを新規構築する。UST-003/004の後続。規模が大きいため見積もりの確度は低め。",
+            "start": "2026-09-19",
+            "plannedEnd": "2026-09-22",
+            "actualEnd": null,
+            "status": "未対応",
+            "priority": 2
+          },
+          {
+            "title": "記録UI・予測・アドバイス機能",
+            "subtitle": "UST-006",
+            "summary": "利用上限に達しそうなタイミングの予測、作業ペースのアドバイス機能を追加する。UST-005の後続。見積もりの確度は低め。",
+            "start": "2026-09-23",
+            "plannedEnd": "2026-09-28",
             "actualEnd": null,
             "status": "未対応",
             "priority": 2
@@ -86,147 +305,26 @@
         ]
       },
       {
-        "title": "セキュリティ",
-        "subtitle": "",
-        "summary": "",
+        "title": "text-extraction: 画像文字起こし処理",
+        "subtitle": "TEX-001 / TEX-002",
+        "summary": "⚠️ 認証情報(credentials/service_account.json・config.json)がユーザーから提供されるまで着手できない。ここでの日付は「提供された場合の目安」であり確定した予定ではない。",
         "children": [
           {
-            "title": "インプット",
-            "subtitle": "見出し・要点をざっと眺める",
-            "summary": "・OWASP Top 10の項目名(インジェクション・XSS・認証の不備・アクセス制御の不備など)\n・暗号化の2区分: 対称鍵 vs 公開鍵\n・認証(Authentication、本人確認)と認可(Authorization、権限確認)の違い\n・シークレット管理の基本(コードに直書きしない、環境変数化)\n(疲れている日は「眺めるだけ」でもOK)",
-            "start": "2026-08-25",
-            "plannedEnd": "2026-08-27",
+            "title": "今回分の失敗画像の文字起こし処理",
+            "subtitle": "TEX-001",
+            "summary": "スキャフォールド(claude_pipeline/)は実装済み。認証情報の提供待ちで、実データ処理そのものは未着手。",
+            "start": "2026-09-29",
+            "plannedEnd": "2026-09-30",
             "actualEnd": null,
             "status": "未対応",
             "priority": 2
           },
           {
-            "title": "積極的想起チェック",
-            "subtitle": "検索練習(何も見ずに説明できるか)",
-            "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
-            "start": "2026-08-28",
-            "plannedEnd": "2026-08-28",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          },
-          {
-            "title": "間隔反復レビュー",
-            "subtitle": "1〜2日空けてもう一度思い出す",
-            "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
-            "start": "2026-08-30",
-            "plannedEnd": "2026-08-30",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          }
-        ]
-      },
-      {
-        "title": "AI/LLM",
-        "subtitle": "",
-        "summary": "",
-        "children": [
-          {
-            "title": "インプット",
-            "subtitle": "見出し・要点をざっと眺める",
-            "summary": "・プロンプトエンジニアリングの基本(指示の与え方で出力が変わる)\n・RAG(検索拡張生成): 外部情報を検索してから回答させる仕組み\n・Embedding(埋め込み): 文章を数値ベクトルに変換し類似度を計算する仕組み\n・トークン・レート制限・コストの関係(長い入出力ほど高くつく)\n(疲れている日は「眺めるだけ」でもOK)",
-            "start": "2026-08-31",
-            "plannedEnd": "2026-09-02",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          },
-          {
-            "title": "積極的想起チェック",
-            "subtitle": "検索練習(何も見ずに説明できるか)",
-            "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
-            "start": "2026-09-03",
-            "plannedEnd": "2026-09-03",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          },
-          {
-            "title": "間隔反復レビュー",
-            "subtitle": "1〜2日空けてもう一度思い出す",
-            "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
-            "start": "2026-09-05",
-            "plannedEnd": "2026-09-05",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          }
-        ]
-      },
-      {
-        "title": "データベース",
-        "subtitle": "",
-        "summary": "",
-        "children": [
-          {
-            "title": "インプット",
-            "subtitle": "見出し・要点をざっと眺める",
-            "summary": "・SQL(構造化・厳密なスキーマ)vs NoSQL(柔軟なスキーマ)の違い\n・正規化: データの重複を減らす設計手法\n・インデックス: 検索を高速化する仕組み(その分書き込みは遅くなる)\n・トランザクション/ACID: 「全部成功するか、全部失敗するか」を保証する仕組み\n(疲れている日は「眺めるだけ」でもOK)",
-            "start": "2026-09-06",
-            "plannedEnd": "2026-09-07",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          },
-          {
-            "title": "積極的想起チェック",
-            "subtitle": "検索練習(何も見ずに説明できるか)",
-            "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
-            "start": "2026-09-08",
-            "plannedEnd": "2026-09-08",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          },
-          {
-            "title": "間隔反復レビュー",
-            "subtitle": "1〜2日空けてもう一度思い出す",
-            "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
-            "start": "2026-09-10",
-            "plannedEnd": "2026-09-10",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          }
-        ]
-      },
-      {
-        "title": "テスト",
-        "subtitle": "",
-        "summary": "",
-        "children": [
-          {
-            "title": "インプット",
-            "subtitle": "見出し・要点をざっと眺める",
-            "summary": "・単体テスト(1関数)・結合テスト(複数の組み合わせ)・E2Eテスト(実際の操作全体)の違い\n・TDD(テスト駆動開発)のサイクル: Red(失敗するテストを書く)→Green(通す実装)→Refactor(整理)\n・カバレッジ: コードのうちテストで通った割合を示す指標\n(疲れている日は「眺めるだけ」でもOK)",
-            "start": "2026-09-11",
-            "plannedEnd": "2026-09-12",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          },
-          {
-            "title": "積極的想起チェック",
-            "subtitle": "検索練習(何も見ずに説明できるか)",
-            "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
-            "start": "2026-09-13",
-            "plannedEnd": "2026-09-13",
-            "actualEnd": null,
-            "status": "未対応",
-            "priority": 2
-          },
-          {
-            "title": "間隔反復レビュー",
-            "subtitle": "1〜2日空けてもう一度思い出す",
-            "summary": "①②の内容を、何も見ずにもう一度ざっと思い出す(忘れかけたタイミングでの再想起)。",
-            "start": "2026-09-15",
-            "plannedEnd": "2026-09-15",
+            "title": "標準版テンプレートの文字起こし処理",
+            "subtitle": "TEX-002",
+            "summary": "TEX-001と同じ仕組みを標準の処理対象フォルダに適用する定期処理版。TEX-001と同じく認証情報の提供待ち。",
+            "start": "2026-10-01",
+            "plannedEnd": "2026-10-02",
             "actualEnd": null,
             "status": "未対応",
             "priority": 2
@@ -234,5 +332,30 @@
         ]
       }
     ]
+  },
+  "actualsLog": {
+    "summary": "今後の見積もり精度を上げるための参考記録。git commitのタイムスタンプから「作業が連続していた区間」をクラスタリングして算出した、実際にかかった時間(セッション時間)のログ。",
+    "caveat": "この時間は人(ユーザー)とのやり取り・議論・意思決定待ちの時間も含む「セッション全体の経過時間」であり、AIが自動で作業した純粋な実行時間ではない。また複数の異なる作業が同じセッション内で連続して行われた場合はまとめて1件になっている。目安として参考にする程度にとどめること。",
+    "entries": [
+      {
+        "date": "2026-08-15",
+        "timeRange": "02:18-03:15",
+        "durationMinutes": 57,
+        "summary": "kizashi: 地図ズームボタンのバグ修正・間取り再修正機能の追加・AI相談の電話番号/モデルID確認"
+      },
+      {
+        "date": "2026-08-15",
+        "timeRange": "04:01-05:05",
+        "durationMinutes": 64,
+        "summary": "kizashi: 提出資料一式の作成(プレゼン資料更新・デモ動画再収録・スクリーンショット複数回の調整・entry-form-draft整備)"
+      },
+      {
+        "date": "2026-08-15",
+        "timeRange": "11:57-12:56",
+        "durationMinutes": 59,
+        "summary": "kizashi: 提出フォームの記入サポート(項目ごとの文章作成)・実際の提出・収録予約・タスク整理"
+      }
+    ],
+    "totalMinutesToday": 180
   }
 }
