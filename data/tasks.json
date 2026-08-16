@@ -59,8 +59,8 @@
               "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
               "start": "2026-08-16",
               "plannedEnd": "2026-08-16",
-              "actualEnd": null,
-              "status": "未対応",
+              "actualEnd": "2026-08-16",
+              "status": "完了",
               "priority": 2,
               "taskId": "STU-002"
             },
