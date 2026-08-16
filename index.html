@@ -209,6 +209,11 @@
     margin-right: 6px; letter-spacing: 0.02em; vertical-align: 1px;
   }
   .lv1 .lv-chip { color: var(--accent-strong); background: var(--accent-soft); }
+  .task-id-chip {
+    display: inline-block; font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+    color: var(--ink-soft); background: transparent; border: 1px solid var(--line);
+    border-radius: 4px; padding: 0 4px; margin-right: 6px; letter-spacing: 0.02em; vertical-align: 1px;
+  }
   .t-title { display: inline; font-weight: 600; font-size: 12.5px; line-height: 1.35; }
   .lv1 .t-title { font-weight: 800; font-size: 15px; }
   .lv2 .t-title { font-weight: 700; font-size: 13.5px; }
@@ -275,7 +280,7 @@
     transform: translateY(-50%); border-radius: 50%; background: var(--status-done);
     box-shadow: 0 0 0 2px var(--surface);
   }
-  /* 集計行(Lv1〜3)のバー: 実行タスク(Lv4)の太い実績バーと区別するため、細い帯として表示する */
+  /* 集計行(Lv1〜2)のバー: 実行タスク(Lv3)の太い実績バーと区別するため、細い帯として表示する */
   td.day.rollup .fill { inset: 15px 0; }
   td.day.rollup .fill.slip { inset: 15px 0; }
 
@@ -321,9 +326,9 @@
     <h1>スケジュール管理WBS</h1>
   </div>
   <p class="lede">
-    学習タスクと各アプリの開発タスクを、同じ階層(WBS)・同じ時間予算で管理します。Lv1は全体、Lv2〜3はそれを
-    分解した中間タスク、Lv4が実際にカレンダーへ予定を入れて進める実行タスクです。Lv4のステータス・完了が
-    自動的に親(Lv3→Lv2→Lv1)へ積み上がり、上位タスクの期間・遅延も子タスクから自動集計されます。各行の▸/⌄で
+    学習タスクと各アプリの開発タスクを、同じ階層(WBS)・同じ時間予算で管理します。Lv1は「勉強」「各アプリ作成」の
+    2本、Lv2はそれを分解した中間タスク、Lv3が実際にカレンダーへ予定を入れて進める実行タスクです。Lv3のステータス・
+    完了が自動的に親(Lv2→Lv1)へ積み上がり、上位タスクの期間・遅延も子タスクから自動集計されます。各行の▸/⌄で
     折りたたみできます。タスクの追加・ステータス更新はチャットでClaudeへ依頼してください。
   </p>
 
@@ -334,8 +339,8 @@
     <div class="legend-group"><span class="legend-swatch" style="background:var(--status-inprogress-bg)"></span>対応中</div>
     <div class="legend-group"><span class="legend-swatch" style="background:var(--status-done-bg)"></span>完了</div>
     <div class="legend-sep"></div>
-    <div class="legend-group"><span class="legend-swatch" style="background:var(--status-inprogress-bg)"></span>Lv4=実行タスクの実績(太いバー)</div>
-    <div class="legend-group"><span class="legend-swatch thin" style="background:var(--status-inprogress-bg)"></span>Lv1〜3=子タスクからの自動集計(細いバー)</div>
+    <div class="legend-group"><span class="legend-swatch" style="background:var(--status-inprogress-bg)"></span>Lv3=実行タスクの実績(太いバー)</div>
+    <div class="legend-group"><span class="legend-swatch thin" style="background:var(--status-inprogress-bg)"></span>Lv1〜2=子タスクからの自動集計(細いバー)</div>
     <div class="legend-sep"></div>
     <div class="legend-group"><span class="legend-tick"></span>当初の終了予定日</div>
     <div class="legend-group"><span class="legend-swatch" style="background:var(--sev-warn-bg)"></span>遅延(軽度〜重度で色が濃くなる)</div>
@@ -399,7 +404,7 @@ function reviveDates(raw) {
   return node;
 }
 
-// ---- 子タスクからの再帰的な自動集計(Lv4の実データがLv3→Lv2→Lv1へ積み上がる) ----
+// ---- 子タスクからの再帰的な自動集計(Lv3の実データがLv2→Lv1へ積み上がる) ----
 function computeNode(raw, level, path) {
   const id = path;
   const isLeaf = !raw.children;
@@ -461,7 +466,7 @@ function twistyIcon() {
 }
 
 const collapsed = new Set();
-let ROOT = null;
+let ROOTS = [];
 let LEAVES = [];
 let DAYS = [];
 
@@ -520,7 +525,7 @@ function renderNode(t) {
         <span class="indent" style="width:${(t.level - 1) * 18}px"></span>
         <button type="button" class="twisty${hasChildren ? "" : " leaf"}${isCollapsed ? " collapsed" : ""}" data-toggle="${t.id}" ${hasChildren ? "" : "tabindex=\"-1\" aria-hidden=\"true\""}>${twistyIcon()}</button>
         <div class="title-col-body">
-          <span class="lv-chip">Lv${t.level}</span><span class="t-title">${escapeHtml(t.title)}</span>
+          <span class="lv-chip">Lv${t.level}</span>${t.taskId ? `<span class="task-id-chip">${escapeHtml(t.taskId)}</span>` : ""}<span class="t-title">${escapeHtml(t.title)}</span>
           <div class="t-subtitle">${escapeHtml(t.subtitle || "")}</div>
         </div>
       </div>
@@ -567,7 +572,7 @@ function render() {
           ${renderTheadDays()}
         </tr>
       </thead>
-      <tbody>${renderNode(ROOT)}</tbody>
+      <tbody>${ROOTS.map(renderNode).join("")}</tbody>
     </table>
   `;
   document.querySelectorAll("[data-toggle]").forEach(btn => {
@@ -595,31 +600,33 @@ async function loadTasks() {
     return;
   }
 
-  const revived = reviveDates(data.root);
-  if (!revived.children || revived.children.length === 0) {
+  const rawRoots = data.roots || (data.root ? [data.root] : []);
+  const revivedList = rawRoots.map(reviveDates);
+  if (revivedList.length === 0 || revivedList.every(r => !r.children || r.children.length === 0)) {
     document.getElementById("stats").innerHTML = "";
     emptyEl.hidden = false;
-    emptyEl.innerHTML = `<strong>${escapeHtml(revived.title)}</strong><br>${escapeHtml(revived.summary || "")}`;
+    const first = revivedList[0] || { title: "", summary: "" };
+    emptyEl.innerHTML = `<strong>${escapeHtml(first.title)}</strong><br>${escapeHtml(first.summary || "")}`;
     document.getElementById("rangeNote").textContent = "";
     document.getElementById("todayLabel").textContent = fmt(TODAY);
     return;
   }
 
-  ROOT = computeNode(revived, 1, "0");
-  LEAVES = flatten(ROOT, []).filter(n => n.isLeaf);
+  ROOTS = revivedList.map((r, i) => computeNode(r, 1, String(i)));
+  LEAVES = ROOTS.flatMap(r => flatten(r, [])).filter(n => n.isLeaf);
 
-  let rangeStart = addDays(ROOT.start, -2);
-  let rangeEnd = addDays(ROOT.currentEnd, 2);
+  let rangeStart = ROOTS.reduce((min, r) => addDays(r.start, -2) < min ? addDays(r.start, -2) : min, addDays(ROOTS[0].start, -2));
+  let rangeEnd = ROOTS.reduce((max, r) => addDays(r.currentEnd, 2) > max ? addDays(r.currentEnd, 2) : max, addDays(ROOTS[0].currentEnd, 2));
   DAYS = [];
   for (let cur = new Date(rangeStart); cur <= rangeEnd; cur = addDays(cur, 1)) DAYS.push(new Date(cur));
 
   const delayed = LEAVES.filter(t => t.status !== "完了" && t.delayDays > 0).length;
   const done = LEAVES.filter(t => t.status === "完了").length;
   document.getElementById("stats").innerHTML = [
-    { num: 1, label: "目標(Lv1)" },
-    { num: LEAVES.length, label: "実行タスク(Lv4)" },
+    { num: ROOTS.length, label: "目標(Lv1)" },
+    { num: LEAVES.length, label: "実行タスク(Lv3)" },
     { num: delayed, label: "遅延中", warn: delayed > 0 },
-    { num: `${done}/${LEAVES.length}`, label: "完了(Lv4)" },
+    { num: `${done}/${LEAVES.length}`, label: "完了(Lv3)" },
   ].map(s => `<div class="stat-tile"><div class="num${s.warn ? " warn" : ""}">${s.num}</div><div class="label">${s.label}</div></div>`).join("");
 
   legendEl.hidden = false;
