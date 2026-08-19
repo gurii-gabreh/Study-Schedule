@@ -48,8 +48,8 @@
               "summary": "・デザインパターンの3系統: 生成(Factory, Singleton, Builder)/構造(Adapter, Facade, Decorator)/振る舞い(Observer, Strategy, Command)\n・SOLID原則の5つの名前と一言の意味(単一責任・開放閉鎖・リスコフの置換・インターフェース分離・依存性逆転)\n・Clean Architectureの核心図: 「依存は常に内側(ビジネスロジック)に向かう」\n・モノリス vs マイクロサービスという対比軸\n(疲れている日は「眺めるだけ」でもOK)",
               "start": "2026-08-13",
               "plannedEnd": "2026-08-15",
-              "actualEnd": null,
-              "status": "未対応",
+              "actualEnd": "2026-08-16",
+              "status": "完了",
               "priority": 2,
               "taskId": "STU-001"
             },
