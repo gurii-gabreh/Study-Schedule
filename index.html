@@ -316,6 +316,17 @@
   @media (prefers-reduced-motion: reduce) {
     #tip, .twisty svg { transition: none; }
   }
+
+  /* モバイル(2026-08-16追加): .col-title(レベル・タスク名列)がposition:stickyのまま
+     260px固定だと、狭い画面ではこの列だけで大半を占め、右側のカレンダー部分が
+     ほぼ見えなくなる。狭い画面では固定をやめ、テーブル全体を横スクロールさせる
+     (.boardは元からoverflow:autoなので、stickyを外すだけで横スクロールに切り替わる)。 */
+  @media (max-width: 640px) {
+    th.col-title, td.col-title {
+      position: static;
+      max-width: none;
+    }
+  }
 </style>
 </head>
 <body>
