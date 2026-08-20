@@ -136,11 +136,11 @@
             {
               "title": "積極的想起チェック",
               "subtitle": "検索練習(何も見ずに説明できるか)",
-              "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。",
+              "summary": "①で読んだ内容を、何も見ずに自分の言葉で説明できるか確認する。App-Development-Info(records/security.html)に想起チェックの原文と正誤の記録(9正解+2点訂正)を記録済み。",
               "start": "2026-08-28",
               "plannedEnd": "2026-08-28",
-              "actualEnd": null,
-              "status": "未対応",
+              "actualEnd": "2026-08-20",
+              "status": "完了",
               "priority": 2,
               "taskId": "STU-008"
             },
