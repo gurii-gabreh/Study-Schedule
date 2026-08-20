@@ -125,11 +125,11 @@
             {
               "title": "インプット",
               "subtitle": "見出し・要点をざっと眺める",
-              "summary": "・OWASP Top 10の項目名(インジェクション・XSS・認証の不備・アクセス制御の不備など)\n・暗号化の2区分: 対称鍵 vs 公開鍵\n・認証(Authentication、本人確認)と認可(Authorization、権限確認)の違い\n・シークレット管理の基本(コードに直書きしない、環境変数化)\n(疲れている日は「眺めるだけ」でもOK)",
+              "summary": "・OWASP Top 10:2025(最新の正式版、8回目の改訂)の項目名: 1位Broken Access Control(アクセス制御)、2位Security Misconfiguration(設定不備)、3位Software Supply Chain Failures(供給網、新設)など\n・暗号化の2区分: 対称鍵(共通鍵、高速・大量データ向き) vs 公開鍵(非対称鍵、事前の鍵共有不要)\n・認証(Authentication、本人確認)と認可(Authorization、権限確認)の違い。認証が必ず先\n・シークレット管理の基本(コードに直書きしない、環境変数化、一元管理・自動ローテーション)\n(疲れている日は「眺めるだけ」でもOK)",
               "start": "2026-08-25",
               "plannedEnd": "2026-08-27",
-              "actualEnd": null,
-              "status": "未対応",
+              "actualEnd": "2026-08-20",
+              "status": "完了",
               "priority": 2,
               "taskId": "STU-007"
             },
